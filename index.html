@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Form Script Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kantumruy+Pro:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', 'Kantumruy Pro', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col items-center p-4 py-12">
+
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden mb-8 relative">
+        <!-- Language Switcher -->
+        <div class="absolute top-4 right-4 z-10 flex bg-white/20 p-1 rounded-lg backdrop-blur-sm border border-white/30">
+            <button id="langEn" class="px-2 py-1 text-[10px] font-bold rounded shadow-sm transition-all bg-white text-indigo-700">EN</button>
+            <button id="langKh" class="px-2 py-1 text-[10px] font-bold rounded transition-all text-white hover:bg-white/10">KH</button>
+        </div>
+
+        <!-- Header -->
+        <div class="bg-indigo-700 p-8 text-center text-white">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-2xl mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <h1 id="txt-header-title" class="text-2xl font-bold mb-1">Google Form Script Generator</h1>
+            <p id="txt-header-sub" class="text-indigo-100 text-sm opacity-90">Optimized for faster quiz creation</p>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="p-8 space-y-6">
+            <!-- Quiz Title -->
+            <div>
+                <label id="txt-label-title" for="quizTitle" class="block text-sm font-semibold text-slate-700 mb-2">Quiz Title</label>
+                <input type="text" id="quizTitle" value="" 
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-900"
+                    placeholder="Please input quiz title">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Points -->
+                <div>
+                    <label id="txt-label-points" for="points" class="block text-sm font-semibold text-slate-700 mb-2">Points / Question</label>
+                    <input type="number" id="points" value="1" min="0"
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-900">
+                </div>
+
+                <!-- Number of Choices -->
+                <div>
+                    <label id="txt-label-choices" for="numChoices" class="block text-sm font-semibold text-slate-700 mb-2">No. of Choices</label>
+                    <input type="number" id="numChoices" value="4" min="2" max="10"
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-900">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <span id="txt-label-required" class="text-sm font-semibold text-slate-700">Make Questions Required</span>
+                <label class="relative inline-flex items-center cursor-pointer py-1">
+                    <input type="checkbox" id="isRequired" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[6px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+            </div>
+
+            <!-- Action Button -->
+            <div class="pt-2">
+                <button id="copyBtn" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-3 shadow-lg shadow-indigo-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                    </svg>
+                    <span id="txt-btn-copy">Copy Optimized Code</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Data Preparation Guide -->
+        <div class="bg-indigo-50 p-6 border-t border-indigo-100">
+            <h3 id="txt-prep-title" class="text-xs font-bold text-indigo-700 uppercase tracking-widest mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                </svg>
+                Spreadsheet Preparation
+            </h3>
+            <div class="space-y-3 text-[13px] text-slate-700">
+                <p id="txt-prep-step1"><strong>Step 1:</strong> Rename your sheet tab to <code class="bg-indigo-100 text-indigo-700 px-1 rounded font-mono">Sheet1</code>.</p>
+                <div class="p-3 bg-white rounded-lg border border-indigo-100 font-mono text-[11px] space-y-1 shadow-sm overflow-x-auto">
+                    <div class="flex border-b border-slate-100 pb-1 font-bold text-indigo-600 uppercase min-w-[300px]">
+                        <div class="w-1/4" id="txt-col-a">Col A</div>
+                        <div class="w-1/4" id="txt-col-b">Col B</div>
+                        <div class="w-2/4" id="txt-col-rem">Remaining Cols</div>
+                    </div>
+                    <div class="flex text-slate-500 min-w-[300px]">
+                        <div class="w-1/4 text-[10px]" id="txt-cell-q">Question</div>
+                        <div class="w-1/4 text-[10px]" id="txt-cell-c">Correct Ans</div>
+                        <div id="colGuide" class="w-2/4 text-[10px]">Distractors (Cols C to E)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Use Section -->
+        <div class="bg-slate-50 p-6 border-t border-slate-200">
+            <h3 id="txt-how-title" class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">How to Generate Form</h3>
+            <ul class="text-[13px] text-slate-600 space-y-4">
+                <li class="flex items-start gap-3">
+                    <span class="bg-slate-800 text-white rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 text-[10px] mt-0.5 font-bold">1</span>
+                    <div id="txt-step-1"><strong>Copy:</strong> Set options above and click <strong>Copy Code</strong>.</div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="bg-slate-800 text-white rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 text-[10px] mt-0.5 font-bold">2</span>
+                    <div id="txt-step-2"><strong>Apps Script:</strong> Open your Google Sheet, go to <strong>Extensions</strong> > <strong>Apps Script</strong>.</div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="bg-slate-800 text-white rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 text-[10px] mt-0.5 font-bold">3</span>
+                    <div id="txt-step-3"><strong>Paste:</strong> Delete existing code, paste this script, and click the <strong>Save</strong> icon.</div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="bg-slate-800 text-white rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 text-[10px] mt-0.5 font-bold">4</span>
+                    <div id="txt-step-4"><strong>Run:</strong> Click the <strong>Run</strong> button.</div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="bg-slate-800 text-white rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 text-[10px] mt-0.5 font-bold">5</span>
+                    <div id="txt-step-5"><strong>Get URL:</strong> Look at the <strong>Execution Log</strong> at the bottom. Copy the link next to <code>Edit URL:</code> to open your new quiz.</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Institutional Footer -->
+    <footer class="pb-12 text-center">
+        <p class="text-slate-400 text-sm font-medium">Kampong Cham Teacher Training College (KCTEC)</p>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-8 py-3 rounded-full text-sm font-medium shadow-2xl opacity-0 transition-opacity pointer-events-none z-50">
+        Code Copied!
+    </div>
+
+    <!-- Hidden TextArea for Copy logic -->
+    <textarea id="hiddenCode" class="sr-only"></textarea>
+
+    <script>
+        const quizTitleInput = document.getElementById('quizTitle');
+        const pointsInput = document.getElementById('points');
+        const numChoicesInput = document.getElementById('numChoices');
+        const requiredInput = document.getElementById('isRequired');
+        const colGuide = document.getElementById('colGuide');
+        const copyBtn = document.getElementById('copyBtn');
+        const toast = document.getElementById('toast');
+        const hiddenArea = document.getElementById('hiddenCode');
+
+        const langEnBtn = document.getElementById('langEn');
+        const langKhBtn = document.getElementById('langKh');
+
+        let currentLang = 'en';
+
+        const translations = {
+            en: {
+                headerTitle: "Google Form Script Generator",
+                headerSub: "Optimized for faster quiz creation",
+                labelTitle: "Quiz Title",
+                placeholderTitle: "Please input quiz title",
+                labelPoints: "Points / Question",
+                labelChoices: "No. of Choices",
+                labelRequired: "Make Questions Required",
+                btnCopy: "Copy Optimized Code",
+                prepTitle: "Spreadsheet Preparation",
+                prepStep1: "<strong>Step 1:</strong> Rename your sheet tab to <code class=\"bg-indigo-100 text-indigo-700 px-1 rounded font-mono\">Sheet1</code>.",
+                colA: "Col A",
+                colB: "Col B",
+                colRem: "Remaining Cols",
+                cellQ: "Question",
+                cellC: "Correct Ans",
+                cellD: "Distractors",
+                howTitle: "How to Generate Form",
+                step1: "<strong>Copy:</strong> Set options above and click <strong>Copy Code</strong>.",
+                step2: "<strong>Apps Script:</strong> Open your Google Sheet, go to <strong>Extensions</strong> > <strong>Apps Script</strong>.",
+                step3: "<strong>Paste:</strong> Delete existing code, paste this script, and click the <strong>Save</strong> icon.",
+                step4: "<strong>Run:</strong> Click the <strong>Run</strong> button.",
+                step5: "<strong>Get URL:</strong> Look at the <strong>Execution Log</strong> at the bottom. Copy the link next to <code>Edit URL:</code>.",
+                toast: "Code Copied!"
+            },
+            kh: {
+                headerTitle: "កម្មវិធីបង្កើតកូដសម្រាប់ Google Form",
+                headerSub: "បង្កើនល្បឿនក្នុងការបង្កើតតេស្ត",
+                labelTitle: "ចំណងជើងតេស្ត",
+                placeholderTitle: "សូមបញ្ចូលចំណងជើងតេស្ត",
+                labelPoints: "ពិន្ទុក្នុងមួយសំណួរ",
+                labelChoices: "ចំនួនជម្រើសចម្លើយ",
+                labelRequired: "កំណត់ឱ្យឆ្លើយជាចាំបាច់",
+                btnCopy: "ចម្លងកូដដែលបានកែលម្អ",
+                prepTitle: "ការរៀបចំសន្លឹកកិច្ចការ (Spreadsheet)",
+                prepStep1: "<strong>ជំហានទី១៖</strong> ប្តូរឈ្មោះសន្លឹកកិច្ចការ (Tab) ទៅជា <code class=\"bg-indigo-100 text-indigo-700 px-1 rounded font-mono\">Sheet1</code>។",
+                colA: "ជួរឈរ A",
+                colB: "ជួរឈរ B",
+                colRem: "ជួរឈរបន្ទាប់",
+                cellQ: "សំណួរ",
+                cellC: "ចម្លើយត្រូវ",
+                cellD: "ចម្លើយបញ្ឆោត",
+                howTitle: "របៀបបង្កើត Form",
+                step1: "<strong>ចម្លង៖</strong> កំណត់ជម្រើសខាងលើ រួចចុច <strong>ចម្លងកូដ</strong>។",
+                step2: "<strong>Script៖</strong> បើក Google Sheet រួចចូលទៅកាន់ <strong>Extensions</strong> > <strong>Apps Script</strong>។",
+                step3: "<strong>ដាក់កូដ៖</strong> លុបកូដចាស់ចោល ដាក់កូដថ្មី រួចចុច <strong>រក្សាទុក</strong> (Save)។",
+                step4: "<strong>ដំណើរការ៖</strong> ចុចប៊ូតុង <strong>Run</strong>។",
+                step5: "<strong>យកតំណភ្ជាប់៖</strong> មើលក្នុង <strong>Execution Log</strong> នៅផ្នែកខាងក្រោម រួចចម្លងតំណភ្ជាប់ក្បែរ <code>Edit URL:</code>។",
+                toast: "ចម្លងកូដរួចរាល់!"
+            }
+        };
+
+        function updateLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            document.getElementById('txt-header-title').innerText = t.headerTitle;
+            document.getElementById('txt-header-sub').innerText = t.headerSub;
+            document.getElementById('txt-label-title').innerText = t.labelTitle;
+            quizTitleInput.placeholder = t.placeholderTitle;
+            document.getElementById('txt-label-points').innerText = t.labelPoints;
+            document.getElementById('txt-label-choices').innerText = t.labelChoices;
+            document.getElementById('txt-label-required').innerText = t.labelRequired;
+            document.getElementById('txt-btn-copy').innerText = t.btnCopy;
+            document.getElementById('txt-prep-title').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg> ${t.prepTitle}`;
+            document.getElementById('txt-prep-step1').innerHTML = t.prepStep1;
+            document.getElementById('txt-col-a').innerText = t.colA;
+            document.getElementById('txt-col-b').innerText = t.colB;
+            document.getElementById('txt-col-rem').innerText = t.colRem;
+            document.getElementById('txt-cell-q').innerText = t.cellQ;
+            document.getElementById('txt-cell-c').innerText = t.cellC;
+            document.getElementById('txt-how-title').innerText = t.howTitle;
+            document.getElementById('txt-step-1').innerHTML = t.step1;
+            document.getElementById('txt-step-2').innerHTML = t.step2;
+            document.getElementById('txt-step-3').innerHTML = t.step3;
+            document.getElementById('txt-step-4').innerHTML = t.step4;
+            document.getElementById('txt-step-5').innerHTML = t.step5;
+
+            // Update column guide text
+            const count = parseInt(numChoicesInput.value) || 2;
+            updateColGuide(count);
+
+            // Button styling
+            if(lang === 'en') {
+                langEnBtn.classList.add('bg-white', 'text-indigo-700', 'shadow-sm');
+                langEnBtn.classList.remove('text-white', 'hover:bg-white/10');
+                langKhBtn.classList.remove('bg-white', 'text-indigo-700', 'shadow-sm');
+                langKhBtn.classList.add('text-white', 'hover:bg-white/10');
+            } else {
+                langKhBtn.classList.add('bg-white', 'text-indigo-700', 'shadow-sm');
+                langKhBtn.classList.remove('text-white', 'hover:bg-white/10');
+                langEnBtn.classList.remove('bg-white', 'text-indigo-700', 'shadow-sm');
+                langEnBtn.classList.add('text-white', 'hover:bg-white/10');
+            }
+        }
+
+        function updateColGuide(count) {
+            const endColLetter = String.fromCharCode(64 + count + 1);
+            const distLabel = translations[currentLang].cellD;
+            if (count <= 2) {
+                colGuide.innerText = `${distLabel} (${currentLang === 'kh' ? 'ជួរឈរ' : 'Col'} C)`;
+            } else {
+                colGuide.innerText = `${distLabel} (${currentLang === 'kh' ? 'ជួរឈរ' : 'Cols'} C ${currentLang === 'kh' ? 'ដល់' : 'to'} ${endColLetter})`;
+            }
+        }
+
+        langEnBtn.addEventListener('click', () => updateLanguage('en'));
+        langKhBtn.addEventListener('click', () => updateLanguage('kh'));
+
+        numChoicesInput.addEventListener('input', () => {
+            updateColGuide(parseInt(numChoicesInput.value) || 4);
+        });
+
+        function generateCode() {
+            const title = (quizTitleInput.value || "Untitled Quiz").replace(/'/g, "\\'");
+            const points = pointsInput.value || 0;
+            const numChoices = parseInt(numChoicesInput.value) || 4;
+            const required = requiredInput.checked;
+
+            return `/**
+ * Optimized Google Form Quiz Generator
+ * Kampong Cham Teacher Training College (KCTEC)
+ */
+function popForm() {
+  const ss = SpreadsheetApp.getActive();
+  const sheet = ss.getSheetByName('Sheet1');
+  
+  if (!sheet) {
+    SpreadsheetApp.getUi().alert('Error: Please rename your sheet tab to "Sheet1"');
+    return;
+  }
+  
+  const fullData = sheet.getDataRange().getValues();
+  const quizData = fullData.filter(row => row[0] && row[0].toString().trim() !== "");
+  
+  if (quizData.length === 0) {
+    SpreadsheetApp.getUi().alert('Error: No questions found in Column A.');
+    return;
+  }
+
+  const form = FormApp.create('${title}');
+  form.setIsQuiz(true);
+
+  quizData.forEach(row => {
+    const question = row[0];
+    const correctAnswer = row[1];
+    
+    const rawChoices = row.slice(1, ${numChoices + 1});
+    const choices = rawChoices.filter(cell => cell !== "" && cell !== null && cell !== undefined);
+    
+    if (choices.length === 0) return;
+
+    const shuffled = shuffleArray(choices);
+    
+    const item = form.addMultipleChoiceItem()
+      .setTitle(question)
+      .setPoints(${points})
+      .setRequired(${required});
+    
+    item.setChoices(shuffled.map(text => item.createChoice(text, text === correctAnswer)));
+  });
+  
+  const editUrl = form.getEditUrl();
+  
+  Logger.log('----------------------------------------------------');
+  Logger.log('SUCCESS! Form generated with ' + quizData.length + ' questions.');
+  Logger.log('Edit URL: ' + editUrl);
+  Logger.log('----------------------------------------------------');
+}
+
+function shuffleArray(array) {
+  const newArr = [...array];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+}`;
+        }
+
+        function showToast() {
+            toast.innerText = translations[currentLang].toast;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                toast.classList.remove('opacity-100');
+            }, 2500);
+        }
+
+        copyBtn.addEventListener('click', () => {
+            const code = generateCode();
+            hiddenArea.value = code;
+            hiddenArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast();
+                
+                const originalContent = copyBtn.innerHTML;
+                copyBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-300" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    ${currentLang === 'kh' ? 'ចម្លងរួចរាល់!' : 'Code Copied!'}
+                `;
+                copyBtn.classList.replace('bg-indigo-600', 'bg-emerald-600');
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalContent;
+                    copyBtn.classList.replace('bg-emerald-600', 'bg-indigo-600');
+                }, 2000);
+
+            } catch (err) {
+                console.error('Copy failed', err);
+            }
+        });
+
+        // Initialize with English
+        updateLanguage('en');
+    </script>
+</body>
+</html>
