@@ -42,6 +42,41 @@
                     placeholder="Please input quiz title">
             </div>
 
+            <!-- Student Information Section -->
+            <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
+                <label id="txt-label-info-title" class="block text-sm font-semibold text-indigo-800 mb-3">Add Information Fields</label>
+                <div class="grid grid-cols-2 gap-y-2 gap-x-4">
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input type="checkbox" id="infoStudentID" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500">
+                        <span id="txt-info-id" class="text-sm text-slate-600 group-hover:text-slate-900">Student ID</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input type="checkbox" id="infoClass" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500">
+                        <span id="txt-info-class" class="text-sm text-slate-600 group-hover:text-slate-900">Class</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input type="checkbox" id="infoKhmerName" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500">
+                        <span id="txt-info-kh" class="text-sm text-slate-600 group-hover:text-slate-900">Khmer Name</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input type="checkbox" id="infoEnglishName" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500">
+                        <span id="txt-info-en" class="text-sm text-slate-600 group-hover:text-slate-900">Latin Name</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input type="checkbox" id="infoSex" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500">
+                        <span id="txt-info-sex" class="text-sm text-slate-600 group-hover:text-slate-900">Sex (F/M)</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input type="checkbox" id="infoDOB" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500">
+                        <span id="txt-info-dob" class="text-sm text-slate-600 group-hover:text-slate-900">Date of Birth</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer group col-span-2">
+                        <input type="checkbox" id="infoPhone" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500">
+                        <span id="txt-info-phone" class="text-sm text-slate-600 group-hover:text-slate-900">Phone Number</span>
+                    </label>
+                </div>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <!-- Points -->
                 <div>
@@ -149,6 +184,16 @@
         const pointsInput = document.getElementById('points');
         const numChoicesInput = document.getElementById('numChoices');
         const requiredInput = document.getElementById('isRequired');
+        
+        // Info Checkboxes
+        const infoStudentID = document.getElementById('infoStudentID');
+        const infoClass = document.getElementById('infoClass');
+        const infoKhmerName = document.getElementById('infoKhmerName');
+        const infoEnglishName = document.getElementById('infoEnglishName');
+        const infoSex = document.getElementById('infoSex');
+        const infoDOB = document.getElementById('infoDOB');
+        const infoPhone = document.getElementById('infoPhone');
+
         const colGuide = document.getElementById('colGuide');
         const copyBtn = document.getElementById('copyBtn');
         const toast = document.getElementById('toast');
@@ -165,6 +210,14 @@
                 headerSub: "Optimized for faster quiz creation",
                 labelTitle: "Quiz Title",
                 placeholderTitle: "Please input quiz title",
+                labelInfoTitle: "Add Information Fields",
+                infoId: "Student ID",
+                infoClass: "Class / Group",
+                infoKh: "Khmer Name",
+                infoEn: "Latin Name",
+                infoSex: "Sex (F/M)",
+                infoDob: "Date of Birth",
+                infoPhone: "Phone Number",
                 labelPoints: "Points / Question",
                 labelChoices: "No. of Choices",
                 labelRequired: "Make Questions Required",
@@ -190,6 +243,14 @@
                 headerSub: "បង្កើនល្បឿនក្នុងការបង្កើតតេស្ត",
                 labelTitle: "ចំណងជើងតេស្ត",
                 placeholderTitle: "សូមបញ្ចូលចំណងជើងតេស្ត",
+                labelInfoTitle: "បន្ថែមព័ត៌មានឆ្លើយតប",
+                infoId: "អត្តលេខសិស្ស",
+                infoClass: "ថ្នាក់ / ក្រុម",
+                infoKh: "គោត្តនាម និងនាម",
+                infoEn: "ឈ្មោះឡាតាំង",
+                infoSex: "ភេទ (ស្រី/ប្រុស)",
+                infoDob: "ថ្ងៃខែឆ្នាំកំណើត",
+                infoPhone: "លេខទូរស័ព្ទ",
                 labelPoints: "ពិន្ទុក្នុងមួយសំណួរ",
                 labelChoices: "ចំនួនជម្រើសចម្លើយ",
                 labelRequired: "កំណត់ឱ្យឆ្លើយជាចាំបាច់",
@@ -220,6 +281,16 @@
             document.getElementById('txt-header-sub').innerText = t.headerSub;
             document.getElementById('txt-label-title').innerText = t.labelTitle;
             quizTitleInput.placeholder = t.placeholderTitle;
+            
+            document.getElementById('txt-label-info-title').innerText = t.labelInfoTitle;
+            document.getElementById('txt-info-id').innerText = t.infoId;
+            document.getElementById('txt-info-class').innerText = t.infoClass;
+            document.getElementById('txt-info-kh').innerText = t.infoKh;
+            document.getElementById('txt-info-en').innerText = t.infoEn;
+            document.getElementById('txt-info-sex').innerText = t.infoSex;
+            document.getElementById('txt-info-dob').innerText = t.infoDob;
+            document.getElementById('txt-info-phone').innerText = t.infoPhone;
+
             document.getElementById('txt-label-points').innerText = t.labelPoints;
             document.getElementById('txt-label-choices').innerText = t.labelChoices;
             document.getElementById('txt-label-required').innerText = t.labelRequired;
@@ -238,11 +309,9 @@
             document.getElementById('txt-step-4').innerHTML = t.step4;
             document.getElementById('txt-step-5').innerHTML = t.step5;
 
-            // Update column guide text
             const count = parseInt(numChoicesInput.value) || 2;
             updateColGuide(count);
 
-            // Button styling
             if(lang === 'en') {
                 langEnBtn.classList.add('bg-white', 'text-indigo-700', 'shadow-sm');
                 langEnBtn.classList.remove('text-white', 'hover:bg-white/10');
@@ -279,6 +348,16 @@
             const numChoices = parseInt(numChoicesInput.value) || 4;
             const required = requiredInput.checked;
 
+            // Generate Information fields code
+            let infoCode = "";
+            if (infoStudentID.checked) infoCode += "  form.addTextItem().setTitle('អត្តលេខសិស្ស (Student ID)').setRequired(true);\n";
+            if (infoClass.checked) infoCode += "  form.addTextItem().setTitle('ថ្នាក់ / ក្រុម (Class / Group)').setRequired(true);\n";
+            if (infoKhmerName.checked) infoCode += "  form.addTextItem().setTitle('គោត្តនាម និងនាម (Khmer Name)').setRequired(true);\n";
+            if (infoEnglishName.checked) infoCode += "  form.addTextItem().setTitle('Full Name (Latin)').setRequired(true);\n";
+            if (infoSex.checked) infoCode += "  form.addMultipleChoiceItem().setTitle('ភេទ (Sex)').setChoiceValues(['ស្រី (Female)', 'ប្រុស (Male)']).setRequired(true);\n";
+            if (infoDOB.checked) infoCode += "  form.addDateItem().setTitle('ថ្ងៃខែឆ្នាំកំណើត (Date of Birth)').setRequired(true);\n";
+            if (infoPhone.checked) infoCode += "  form.addTextItem().setTitle('លេខទូរស័ព្ទ (Phone Number)').setRequired(true);\n";
+
             return `/**
  * Optimized Google Form Quiz Generator
  * Kampong Cham Teacher Training College (KCTEC)
@@ -303,6 +382,9 @@ function popForm() {
   const form = FormApp.create('${title}');
   form.setIsQuiz(true);
 
+  // --- Student Information Section ---
+${infoCode}
+  // --- Quiz Questions ---
   quizData.forEach(row => {
     const question = row[0];
     const correctAnswer = row[1];
@@ -378,8 +460,8 @@ function shuffleArray(array) {
             }
         });
 
-        // Initialize with English
         updateLanguage('en');
     </script>
 </body>
 </html>
+
