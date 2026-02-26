@@ -38,8 +38,16 @@
             <div>
                 <label id="txt-label-title" for="quizTitle" class="block text-sm font-semibold text-slate-700 mb-2">Quiz Title</label>
                 <input type="text" id="quizTitle" value="" 
-                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-900"
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-slate-900"
                     placeholder="Please input quiz title">
+            </div>
+
+            <!-- Quiz Description -->
+            <div>
+                <label id="txt-label-desc" for="quizDesc" class="block text-sm font-semibold text-slate-700 mb-2">Form Description</label>
+                <textarea id="quizDesc" rows="2"
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-slate-900"
+                    placeholder="Enter instructions or description"></textarea>
             </div>
 
             <!-- Student Information Section -->
@@ -77,28 +85,45 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <!-- Points -->
-                <div>
-                    <label id="txt-label-points" for="points" class="block text-sm font-semibold text-slate-700 mb-2">Points / Question</label>
-                    <input type="number" id="points" value="1" min="0"
-                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-900">
+            <!-- Toggles & Points -->
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label id="txt-label-points" for="points" class="block text-sm font-semibold text-slate-700 mb-2">Points / Question</label>
+                        <input type="number" id="points" value="1" min="0"
+                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-slate-900">
+                    </div>
+                    <div>
+                        <label id="txt-label-choices" for="numChoices" class="block text-sm font-semibold text-slate-700 mb-2">No. of Choices</label>
+                        <input type="number" id="numChoices" value="4" min="2" max="10"
+                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-slate-900">
+                    </div>
                 </div>
 
-                <!-- Number of Choices -->
-                <div>
-                    <label id="txt-label-choices" for="numChoices" class="block text-sm font-semibold text-slate-700 mb-2">No. of Choices</label>
-                    <input type="number" id="numChoices" value="4" min="2" max="10"
-                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-slate-900">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span id="txt-label-required" class="text-sm font-semibold text-slate-700">Make Questions Required</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="isRequired" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span id="txt-label-shuffle" class="text-sm font-semibold text-slate-700">Shuffle question order</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="shuffleQuestions" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <span id="txt-label-required" class="text-sm font-semibold text-slate-700">Make Questions Required</span>
-                <label class="relative inline-flex items-center cursor-pointer py-1">
-                    <input type="checkbox" id="isRequired" class="sr-only peer" checked>
-                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[6px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                </label>
+            <!-- Confirmation Message -->
+            <div>
+                <label id="txt-label-confirm" for="confirmMsg" class="block text-sm font-semibold text-slate-700 mb-2">Confirmation Message</label>
+                <input type="text" id="confirmMsg" 
+                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-slate-900"
+                    placeholder="e.g., Thank you for completing the test!">
             </div>
 
             <!-- Action Button -->
@@ -181,9 +206,12 @@
 
     <script>
         const quizTitleInput = document.getElementById('quizTitle');
+        const quizDescInput = document.getElementById('quizDesc');
         const pointsInput = document.getElementById('points');
         const numChoicesInput = document.getElementById('numChoices');
         const requiredInput = document.getElementById('isRequired');
+        const shuffleQInput = document.getElementById('shuffleQuestions');
+        const confirmMsgInput = document.getElementById('confirmMsg');
         
         // Info Checkboxes
         const infoStudentID = document.getElementById('infoStudentID');
@@ -210,6 +238,8 @@
                 headerSub: "Optimized for faster quiz creation",
                 labelTitle: "Quiz Title",
                 placeholderTitle: "Please input quiz title",
+                labelDesc: "Form Description",
+                placeholderDesc: "Enter instructions or description",
                 labelInfoTitle: "Add Information Fields",
                 infoId: "Student ID",
                 infoClass: "Class / Group",
@@ -221,6 +251,9 @@
                 labelPoints: "Points / Question",
                 labelChoices: "No. of Choices",
                 labelRequired: "Make Questions Required",
+                labelShuffle: "Shuffle question order",
+                labelConfirm: "Confirmation Message",
+                placeholderConfirm: "e.g., Thank you for completing the test!",
                 btnCopy: "Copy Optimized Code",
                 prepTitle: "Spreadsheet Preparation",
                 prepStep1: "<strong>Step 1:</strong> Rename your sheet tab to <code class=\"bg-indigo-100 text-indigo-700 px-1 rounded font-mono\">Sheet1</code>.",
@@ -243,6 +276,8 @@
                 headerSub: "បង្កើនល្បឿនក្នុងការបង្កើតតេស្ត",
                 labelTitle: "ចំណងជើងតេស្ត",
                 placeholderTitle: "សូមបញ្ចូលចំណងជើងតេស្ត",
+                labelDesc: "ការពិពណ៌នាអំពី Form",
+                placeholderDesc: "បញ្ចូលការណែនាំ ឬការពិពណ៌នា",
                 labelInfoTitle: "បន្ថែមព័ត៌មានឆ្លើយតប",
                 infoId: "អត្តលេខសិស្ស",
                 infoClass: "ថ្នាក់ / ក្រុម",
@@ -254,6 +289,9 @@
                 labelPoints: "ពិន្ទុក្នុងមួយសំណួរ",
                 labelChoices: "ចំនួនជម្រើសចម្លើយ",
                 labelRequired: "កំណត់ឱ្យឆ្លើយជាចាំបាច់",
+                labelShuffle: "ផ្លាស់ប្តូរលំដាប់សំណួរ",
+                labelConfirm: "សារបញ្ជាក់ការឆ្លើយរួចរាល់",
+                placeholderConfirm: "ឧទាហរណ៍៖ សូមអរគុណសម្រាប់ការបំពេញតេស្ត!",
                 btnCopy: "ចម្លងកូដដែលបានកែលម្អ",
                 prepTitle: "ការរៀបចំសន្លឹកកិច្ចការ (Spreadsheet)",
                 prepStep1: "<strong>ជំហានទី១៖</strong> ប្តូរឈ្មោះសន្លឹកកិច្ចការ (Tab) ទៅជា <code class=\"bg-indigo-100 text-indigo-700 px-1 rounded font-mono\">Sheet1</code>។",
@@ -282,6 +320,9 @@
             document.getElementById('txt-label-title').innerText = t.labelTitle;
             quizTitleInput.placeholder = t.placeholderTitle;
             
+            document.getElementById('txt-label-desc').innerText = t.labelDesc;
+            quizDescInput.placeholder = t.placeholderDesc;
+
             document.getElementById('txt-label-info-title').innerText = t.labelInfoTitle;
             document.getElementById('txt-info-id').innerText = t.infoId;
             document.getElementById('txt-info-class').innerText = t.infoClass;
@@ -294,6 +335,10 @@
             document.getElementById('txt-label-points').innerText = t.labelPoints;
             document.getElementById('txt-label-choices').innerText = t.labelChoices;
             document.getElementById('txt-label-required').innerText = t.labelRequired;
+            document.getElementById('txt-label-shuffle').innerText = t.labelShuffle;
+            document.getElementById('txt-label-confirm').innerText = t.labelConfirm;
+            confirmMsgInput.placeholder = t.placeholderConfirm;
+
             document.getElementById('txt-btn-copy').innerText = t.btnCopy;
             document.getElementById('txt-prep-title').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg> ${t.prepTitle}`;
             document.getElementById('txt-prep-step1').innerHTML = t.prepStep1;
@@ -344,9 +389,13 @@
 
         function generateCode() {
             const title = (quizTitleInput.value || "Untitled Quiz").replace(/'/g, "\\'");
+            const description = (quizDescInput.value || "").replace(/'/g, "\\'").replace(/\n/g, "\\n");
             const points = pointsInput.value || 0;
             const numChoices = parseInt(numChoicesInput.value) || 4;
             const required = requiredInput.checked;
+            const shuffleQ = shuffleQInput.checked;
+            const defaultConfirm = currentLang === 'kh' ? "ចម្លើយរបស់អ្នកត្រូវបានរក្សាទុក។" : "Your response has been recorded.";
+            const confirmation = (confirmMsgInput.value || defaultConfirm).replace(/'/g, "\\'");
 
             // Generate Information fields code
             let infoCode = "";
@@ -372,18 +421,41 @@ function popForm() {
   }
   
   const fullData = sheet.getDataRange().getValues();
-  const quizData = fullData.filter(row => row[0] && row[0].toString().trim() !== "");
+  let quizData = fullData.filter(row => row[0] && row[0].toString().trim() !== "");
   
   if (quizData.length === 0) {
     SpreadsheetApp.getUi().alert('Error: No questions found in Column A.');
     return;
   }
 
-  const form = FormApp.create('${title}');
-  form.setIsQuiz(true);
+  // Create the form
+  const rawForm = FormApp.create('${title}');
+  const formId = rawForm.getId();
+  
+  // Re-open form by ID to ensure all object methods are loaded correctly
+  const form = FormApp.openById(formId);
+  
+  // Set Quiz properties
+  if (typeof form.setIsQuiz === 'function') form.setIsQuiz(true);
+  if (typeof form.setDescription === 'function') form.setDescription('${description}');
+  if (typeof form.setConfirmationMessage === 'function') form.setConfirmationMessage('${confirmation}');
+  
+  /**
+   * IMPORTANT: Every student gets a different order.
+   * To achieve this, we enable Google's native Shuffle setting.
+   * To prevent the Name/ID fields from shuffling, we place them in Section 1
+   * and create a new Section 2 for the quiz questions.
+   */
+  if (typeof form.setShuffleQuestions === 'function') form.setShuffleQuestions(${shuffleQ});
 
-  // --- Student Information Section ---
+  // --- Section 1: Information ---
 ${infoCode}
+
+  // --- Section 2: Questions (Only if Shuffle is ON) ---
+  if (${shuffleQ}) {
+    form.addPageBreakItem().setTitle('${currentLang === 'kh' ? 'ផ្នែកសំណួរតេស្ត' : 'Quiz Questions Section'}');
+  }
+
   // --- Quiz Questions ---
   quizData.forEach(row => {
     const question = row[0];
@@ -394,14 +466,15 @@ ${infoCode}
     
     if (choices.length === 0) return;
 
-    const shuffled = shuffleArray(choices);
+    // We shuffle choices within each question
+    const shuffledChoices = shuffleArray(choices);
     
     const item = form.addMultipleChoiceItem()
       .setTitle(question)
       .setPoints(${points})
       .setRequired(${required});
     
-    item.setChoices(shuffled.map(text => item.createChoice(text, text === correctAnswer)));
+    item.setChoices(shuffledChoices.map(text => item.createChoice(text, text === correctAnswer)));
   });
   
   const editUrl = form.getEditUrl();
@@ -412,6 +485,9 @@ ${infoCode}
   Logger.log('----------------------------------------------------');
 }
 
+/**
+ * Shuffles an array using the Fisher-Yates algorithm
+ */
 function shuffleArray(array) {
   const newArr = [...array];
   for (let i = newArr.length - 1; i > 0; i--) {
@@ -464,4 +540,3 @@ function shuffleArray(array) {
     </script>
 </body>
 </html>
-
